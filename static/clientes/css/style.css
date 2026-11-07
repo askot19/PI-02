@@ -1,0 +1,815 @@
+/* =====================================================================
+   Viva Café & Restaurante — identidade visual
+   Paleta: café torrado + bordô, com dourado como acento de destaque.
+   Tipografia: Fraunces (display, itálico expressivo) + Work Sans (corpo).
+   Assinatura: selo de "anel de café" + cartões em formato de comanda,
+   com borda perfurada no topo, remetendo a um recibo de restaurante.
+   ===================================================================== */
+
+:root {
+    --cafe-950: #1c1108;
+    --cafe-900: #241608;
+    --cafe-800: #3a2414;
+    --cafe-700: #513723;
+    --cafe-600: #6f4e37;
+
+    --bordo-700: #5c0f28;
+    --bordo-600: #7a1533;
+    --bordo-500: #9a1c3f;
+
+    --dourado-500: #c9a15a;
+    --dourado-300: #e3c98a;
+
+    --creme-50: #fbf4e9;
+    --creme-100: #f4e6d2;
+    --creme-200: #ead2ae;
+
+    --tinta-900: #241206;
+
+    --sombra-forte: 0 24px 48px -20px rgba(10, 5, 2, 0.65);
+    --sombra-suave: 0 10px 24px -14px rgba(10, 5, 2, 0.5);
+
+    --fonte-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+    --fonte-corpo: "Work Sans", "Segoe UI", Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--fonte-corpo);
+    color: var(--creme-100);
+    background:
+        radial-gradient(circle at 12% -8%, rgba(201, 161, 90, 0.16), transparent 42%),
+        radial-gradient(circle at 108% 15%, rgba(122, 21, 51, 0.35), transparent 45%),
+        linear-gradient(160deg, var(--cafe-950) 0%, var(--cafe-900) 55%, #150c05 100%);
+    padding: 0 20px 60px;
+}
+
+::selection {
+    background: var(--bordo-600);
+    color: var(--creme-50);
+}
+
+a {
+    color: var(--dourado-300);
+    text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+.btn:focus-visible {
+    outline: 2px solid var(--dourado-500);
+    outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------
+   Cabeçalho de marca (usado em todas as páginas)
+   --------------------------------------------------------------------- */
+.marca-topo {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 28px 4px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.marca-topo__nome {
+    font-family: var(--fonte-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.15rem;
+    letter-spacing: 0.02em;
+    color: var(--creme-100);
+}
+
+.marca-topo__voltar {
+    font-family: var(--fonte-corpo);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dourado-300);
+    border: 1px solid rgba(201, 161, 90, 0.4);
+    border-radius: 999px;
+    padding: 8px 18px;
+    transition: background-color .2s ease, color .2s ease;
+}
+.marca-topo__voltar:hover {
+    background-color: var(--dourado-500);
+    color: var(--tinta-900);
+}
+
+.eyebrow {
+    display: inline-block;
+    font-family: var(--fonte-corpo);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--dourado-300);
+    margin-bottom: 14px;
+}
+
+/* ---------------------------------------------------------------------
+   Selo "anel de café" — elemento de assinatura da marca.
+   Usado com moderação: um por página, como marca d'água.
+   --------------------------------------------------------------------- */
+.anel-cafe {
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    border: 22px solid rgba(201, 161, 90, 0.07);
+    pointer-events: none;
+    z-index: 0;
+}
+.anel-cafe::after {
+    content: "";
+    position: absolute;
+    inset: -34px;
+    border-radius: 50%;
+    border: 2px solid rgba(201, 161, 90, 0.05);
+}
+
+/* ---------------------------------------------------------------------
+   Página inicial
+   --------------------------------------------------------------------- */
+.home-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding-top: 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    padding: 20px;
+}
+
+.hero .anel-cafe {
+    top: -120px;
+    right: -160px;
+}
+
+.hero__titulo {
+    font-family: var(--fonte-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(2.6rem, 6vw, 4.4rem);
+    line-height: 1.04;
+    margin: 0 0 18px;
+    color: var(--creme-50);
+}
+.hero__titulo em {
+    display: block;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 0.42em;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--dourado-500);
+    margin-top: 10px;
+}
+
+.hero__subtitulo {
+    font-size: 1.05rem;
+    color: var(--creme-200);
+    opacity: 0.85;
+    max-width: 420px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+}
+
+.acoes {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    font-family: var(--fonte-corpo);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    padding: 15px 34px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+.btn-primario {
+    background: linear-gradient(135deg, var(--bordo-500), var(--bordo-700));
+    color: var(--creme-50);
+    box-shadow: var(--sombra-suave);
+}
+.btn-primario:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-forte);
+}
+.btn-fantasma {
+    background: transparent;
+    color: var(--dourado-300);
+    border: 1px solid rgba(201, 161, 90, 0.5);
+}
+.btn-fantasma:hover {
+    background-color: rgba(201, 161, 90, 0.1);
+    transform: translateY(-2px);
+}
+.btn-bloco {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ---------------------------------------------------------------------
+   Cartão "comanda" — usado em login, cadastro, formulário e edição.
+   Topo com corte serrilhado (efeito de recibo destacável).
+   --------------------------------------------------------------------- */
+.comanda-wrap {
+    max-width: 460px;
+    margin: 56px auto 0;
+    position: relative;
+    z-index: 1;
+}
+
+.comanda {
+    background: linear-gradient(175deg, var(--creme-50), var(--creme-100));
+    color: var(--tinta-900);
+    border-radius: 4px 4px 18px 18px;
+    box-shadow: var(--sombra-forte);
+    padding: 40px 36px 36px;
+    position: relative;
+}
+
+.comanda::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -11px;
+    left: 0;
+    right: 0;
+    height: 22px;
+    background-image: radial-gradient(circle at 10px 11px, var(--cafe-950) 9px, transparent 9.5px);
+    background-size: 22px 22px;
+    background-repeat: repeat-x;
+    background-position: 6px 0;
+}
+
+.comanda__marca {
+    font-family: var(--fonte-corpo);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--bordo-600);
+    margin-bottom: 6px;
+}
+
+.comanda__titulo {
+    font-family: var(--fonte-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 2.1rem;
+    margin: 0 0 6px;
+    color: var(--tinta-900);
+}
+
+.comanda__linha {
+    border: none;
+    border-top: 1px dashed rgba(90, 50, 20, 0.35);
+    margin: 20px 0 26px;
+}
+
+.comanda__rodape {
+    margin-top: 26px;
+    text-align: center;
+    font-size: 0.88rem;
+    color: rgba(36, 18, 6, 0.7);
+}
+.comanda__rodape a {
+    color: var(--bordo-600);
+    font-weight: 600;
+}
+.comanda__rodape a:hover {
+    text-decoration: underline;
+}
+
+.comanda__esqueci {
+    text-align: right;
+    margin: -12px 0 20px;
+    font-size: 0.8rem;
+}
+.comanda__esqueci a {
+    color: var(--bordo-600);
+    font-weight: 600;
+}
+.comanda__esqueci a:hover {
+    text-decoration: underline;
+}
+
+.comanda__texto {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: rgba(36, 18, 6, 0.75);
+    margin: 0 0 24px;
+}
+
+.comanda--centro {
+    text-align: center;
+}
+.comanda--centro .comanda__marca,
+.comanda--centro .comanda__titulo,
+.comanda--centro .comanda__texto {
+    text-align: center;
+}
+
+.campo-ajuda {
+    font-size: 0.78rem;
+    margin: -14px 0 18px;
+    min-height: 14px;
+    color: rgba(36, 18, 6, 0.5);
+}
+.campo-ajuda--ok {
+    color: #2f7a45;
+}
+.campo-ajuda--erro {
+    color: var(--bordo-600);
+}
+
+/* ---------------------------------------------------------------------
+   Análise de mercado (mapa)
+   --------------------------------------------------------------------- */
+.analise-intro {
+    margin: 30px 0 26px;
+}
+
+/* O plugin @maplibre/maplibre-gl-leaflet não respeita direito a ordem de
+   empilhamento (z-index) das "panes" do Leaflet por padrão, então a
+   camada de mapa-base dele pode acabar cobrindo os círculos de clientes/
+   polos/oportunidades (que o Leaflet desenha na overlayPane, z-index 400).
+   Forçamos aqui o z-index da camada do MapLibre pra ficar no mesmo nível
+   de uma camada de tiles comum (200), sempre abaixo dos marcadores.
+   Ver: https://github.com/maplibre/maplibre-gl-leaflet/issues/87 */
+.leaflet-gl-layer {
+    z-index: 200 !important;
+}
+
+.legenda-mapa {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--creme-100);
+    margin-bottom: 10px;
+}
+.legenda-mapa span {
+    display: inline-flex;
+    align-items: center;
+}
+.ponto-legenda {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 7px;
+    border: 1px solid rgba(251, 244, 233, 0.5);
+    flex-shrink: 0;
+}
+
+.campo {
+    position: relative;
+    margin-bottom: 24px;
+}
+.campo label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cafe-700);
+    margin-bottom: 6px;
+}
+.campo input[type="text"],
+.campo input[type="email"],
+.campo input[type="password"],
+.campo input[type="tel"],
+.campo input[type="date"],
+.campo input[type="search"] {
+    width: 100%;
+    font-family: var(--fonte-corpo);
+    font-size: 1rem;
+    color: var(--tinta-900);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(90, 50, 20, 0.25);
+    padding: 8px 2px;
+    outline: none;
+    transition: border-color .18s ease;
+}
+.campo input:focus {
+    border-bottom-color: var(--bordo-600);
+}
+.campo input:disabled {
+    color: rgba(36, 18, 6, 0.45);
+}
+
+.campo-radios {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    margin: 4px 0 24px;
+}
+.campo-radios label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.92rem;
+    color: var(--tinta-900);
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 500;
+}
+.campo-radios input[type="radio"] {
+    accent-color: var(--bordo-600);
+    width: 16px;
+    height: 16px;
+}
+
+.form-errors {
+    background-color: rgba(122, 21, 51, 0.1);
+    border: 1px solid rgba(122, 21, 51, 0.3);
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin: 0 0 22px;
+    list-style: none;
+    color: var(--bordo-700);
+    font-size: 0.88rem;
+}
+.form-errors li {
+    margin: 3px 0;
+}
+
+/* ---------------------------------------------------------------------
+   Painel logado (sistema.html)
+   --------------------------------------------------------------------- */
+.painel {
+    max-width: 1040px;
+    margin: 0 auto;
+}
+
+.painel-hero {
+    text-align: center;
+    padding: 56px 10px 40px;
+}
+.painel-hero__titulo {
+    font-family: var(--fonte-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    color: var(--creme-50);
+    margin: 0;
+}
+.painel-hero__titulo u {
+    text-decoration: none;
+    color: var(--dourado-300);
+    border-bottom: 2px solid rgba(201, 161, 90, 0.4);
+}
+
+.cartoes-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+    margin-top: 10px;
+}
+
+.cartao-nav {
+    display: block;
+    background: linear-gradient(160deg, rgba(244, 230, 210, 0.06), rgba(244, 230, 210, 0.02));
+    border: 1px solid rgba(201, 161, 90, 0.22);
+    border-radius: 18px;
+    padding: 32px 28px;
+    text-align: left;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+.cartao-nav:hover {
+    transform: translateY(-4px);
+    border-color: rgba(201, 161, 90, 0.55);
+    background: linear-gradient(160deg, rgba(244, 230, 210, 0.1), rgba(244, 230, 210, 0.03));
+}
+.cartao-nav__rotulo {
+    font-family: var(--fonte-display);
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--creme-50);
+    display: block;
+    margin-bottom: 8px;
+}
+.cartao-nav__desc {
+    font-size: 0.9rem;
+    color: var(--creme-200);
+    opacity: 0.75;
+}
+
+/* ---------------------------------------------------------------------
+   Barra de navegação superior (sistema / lista)
+   --------------------------------------------------------------------- */
+.nav-comanda {
+    max-width: 1040px;
+    margin: 24px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: linear-gradient(120deg, var(--bordo-700), var(--bordo-600));
+    border-radius: 14px;
+    padding: 14px 22px;
+    box-shadow: var(--sombra-suave);
+    flex-wrap: wrap;
+}
+.nav-comanda__titulo {
+    font-family: var(--fonte-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--creme-50);
+}
+.nav-comanda .btn-nav {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 9px 18px;
+    border-radius: 999px;
+    color: var(--creme-50);
+    border: 1px solid rgba(251, 244, 233, 0.35);
+    background: rgba(0, 0, 0, 0.12);
+    transition: background-color .18s ease;
+}
+.nav-comanda .btn-nav:hover {
+    background-color: rgba(0, 0, 0, 0.28);
+}
+
+/* ---------------------------------------------------------------------
+   Listagem de clientes
+   --------------------------------------------------------------------- */
+.lista-wrap {
+    max-width: 1040px;
+    margin: 30px auto 0;
+}
+
+.lista-boas-vindas {
+    text-align: center;
+    margin: 26px 0 22px;
+    font-size: 1.05rem;
+    color: var(--creme-100);
+}
+.lista-boas-vindas u {
+    text-decoration: none;
+    color: var(--dourado-300);
+    border-bottom: 2px solid rgba(201, 161, 90, 0.4);
+}
+
+.busca {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+}
+.busca input[type="search"] {
+    width: min(360px, 80vw);
+    background: rgba(244, 230, 210, 0.08);
+    border: 1px solid rgba(201, 161, 90, 0.3);
+    border-radius: 999px;
+    padding: 12px 20px;
+    color: var(--creme-50);
+    font-family: var(--fonte-corpo);
+    outline: none;
+}
+.busca input[type="search"]::placeholder {
+    color: rgba(244, 230, 210, 0.55);
+}
+.busca input[type="search"]:focus {
+    border-color: var(--dourado-500);
+}
+.busca button {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 22px;
+    background: var(--dourado-500);
+    color: var(--tinta-900);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .18s ease;
+}
+.busca button:hover {
+    background-color: var(--dourado-300);
+}
+
+.tabela-wrap {
+    background: linear-gradient(175deg, var(--creme-50), var(--creme-100));
+    border-radius: 18px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: var(--sombra-forte);
+    margin-bottom: 40px;
+    cursor: grab;
+    scrollbar-width: thin;
+}
+.tabela-wrap--arrastando {
+    cursor: grabbing;
+    user-select: none;
+}
+.tabela-wrap::-webkit-scrollbar {
+    height: 8px;
+}
+.tabela-wrap::-webkit-scrollbar-thumb {
+    background: rgba(90, 50, 20, 0.3);
+    border-radius: 999px;
+}
+
+/* Container que segura os botões de rolagem ao lado da tabela */
+.tabela-scroll-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+.tabela-scroll-container .tabela-wrap {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+}
+.botao-scroll {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(201, 161, 90, 0.4);
+    background: linear-gradient(135deg, var(--bordo-500), var(--bordo-700));
+    color: var(--creme-50);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--sombra-suave);
+    transition: transform .15s ease, opacity .15s ease;
+}
+.botao-scroll:hover:not(:disabled) {
+    transform: scale(1.08);
+}
+.botao-scroll:disabled {
+    opacity: 0.25;
+    cursor: default;
+}
+.botao-scroll--oculto {
+    display: none;
+}
+
+table.tabela-clientes {
+    width: 100%;
+    min-width: 1080px;
+    border-collapse: collapse;
+    color: var(--tinta-900);
+    font-size: 0.92rem;
+}
+table.tabela-clientes thead th {
+    background: var(--cafe-900);
+    color: var(--creme-100);
+    font-family: var(--fonte-corpo);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 16px 14px;
+    text-align: left;
+}
+table.tabela-clientes tbody td {
+    padding: 14px;
+    border-bottom: 1px solid rgba(90, 50, 20, 0.12);
+    vertical-align: middle;
+}
+table.tabela-clientes tbody tr:last-child td {
+    border-bottom: none;
+}
+table.tabela-clientes tbody tr:hover {
+    background-color: rgba(122, 21, 51, 0.06);
+}
+table.tabela-clientes td.sem-resultado {
+    text-align: center;
+    padding: 32px 14px;
+    color: rgba(36, 18, 6, 0.55);
+    font-style: italic;
+}
+
+.acoes-tabela {
+    display: flex;
+    gap: 8px;
+}
+.acao-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: transform .15s ease, filter .15s ease;
+}
+.acao-editar {
+    background: var(--dourado-500);
+    color: var(--tinta-900);
+}
+.acao-excluir {
+    background: var(--bordo-600);
+    color: var(--creme-50);
+}
+.acao-icone:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+}
+
+/* ---------------------------------------------------------------------
+   Mensagens (Django messages)
+   --------------------------------------------------------------------- */
+.mensagens {
+    max-width: 460px;
+    margin: 22px auto 0;
+    position: relative;
+    z-index: 1;
+}
+.alert {
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+}
+.alert-success {
+    background: rgba(70, 140, 90, 0.16);
+    border-color: rgba(70, 140, 90, 0.4);
+    color: #bfe6c9;
+}
+.alert-error {
+    background: rgba(122, 21, 51, 0.18);
+    border-color: rgba(122, 21, 51, 0.45);
+    color: #f0c3d0;
+}
+.alert-info {
+    background: rgba(201, 161, 90, 0.14);
+    border-color: rgba(201, 161, 90, 0.4);
+    color: var(--dourado-300);
+}
+
+/* ---------------------------------------------------------------------
+   Responsivo
+   --------------------------------------------------------------------- */
+@media (max-width: 640px) {
+    .comanda {
+        padding: 32px 22px 28px;
+    }
+    .nav-comanda {
+        flex-direction: column;
+        text-align: center;
+    }
+    table.tabela-clientes {
+        font-size: 0.82rem;
+    }
+    .botao-scroll {
+        width: 32px;
+        height: 32px;
+        font-size: 1.1rem;
+    }
+    .anel-cafe {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}

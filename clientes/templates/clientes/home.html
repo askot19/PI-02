@@ -1,0 +1,24 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Viva Café & Restaurante{% endblock %}
+{% block body_class %}home-page{% endblock %}
+
+{% block content %}
+<div class="anel-cafe" aria-hidden="true"></div>
+
+<div class="hero">
+    <span class="eyebrow">Restaurante & Café</span>
+    <h1 class="hero__titulo">
+        Viva Café
+        <em>&amp; Restaurante</em>
+    </h1>
+    <p class="hero__subtitulo">
+        Sistema de cadastro e atendimento de clientes — simples para a equipe,
+        acolhedor como a casa.
+    </p>
+    <div class="acoes">
+        <a href="{% url 'login' %}" class="btn btn-primario">Entrar</a>
+        <a href="{% url 'cadastro' %}" class="btn btn-fantasma">Criar conta</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Editar cliente | Restaurante Viva{% endblock %}
+{% block body_class %}form-page{% endblock %}
+
+{% block content %}
+<div class="marca-topo">
+    <span class="marca-topo__nome">Viva Café &amp; Restaurante</span>
+    <a href="{% url 'lista' %}" class="marca-topo__voltar">Voltar</a>
+</div>
+
+<div class="comanda-wrap">
+    <div class="comanda">
+        <span class="comanda__marca">Atualização de cadastro</span>
+        <h1 class="comanda__titulo">Editar cliente</h1>
+        <hr class="comanda__linha">
+
+        {% if form.errors %}
+        <ul class="form-errors">
+            {% for field in form %}{% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}{% endfor %}
+        </ul>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="campo">
+                <label>CPF</label>
+                <input type="text" value="{{ cliente.cpf }}" disabled>
+            </div>
+            <div class="campo">
+                <label for="id_nome">Nome completo</label>
+                <input type="text" name="nome" id="id_nome" value="{{ form.nome.value|default:'' }}" required>
+            </div>
+            <div class="campo">
+                <label for="id_email">Email</label>
+                <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" required>
+            </div>
+            <div class="campo">
+                <label for="id_telefone">Telefone</label>
+                <input type="tel" name="telefone" id="id_telefone" data-mascara="telefone" inputmode="numeric" maxlength="15" placeholder="(00) 00000-0000" value="{{ form.telefone.value|default:'' }}" required>
+            </div>
+
+            <label>Sexo</label>
+            <div class="campo-radios">
+                <label><input type="radio" name="sexo" value="feminino" {% if form.sexo.value == 'feminino' %}checked{% endif %} required> Feminino</label>
+                <label><input type="radio" name="sexo" value="masculino" {% if form.sexo.value == 'masculino' %}checked{% endif %} required> Masculino</label>
+                <label><input type="radio" name="sexo" value="outro" {% if form.sexo.value == 'outro' %}checked{% endif %} required> Outro</label>
+            </div>
+
+            <div class="campo">
+                <label for="id_data_nasc">Data de nascimento</label>
+                <input type="date" name="data_nasc" id="id_data_nasc" value="{{ form.data_nasc.value|date:'Y-m-d'|default:'' }}" required>
+            </div>
+            <div class="campo">
+                <label for="id_cep">CEP</label>
+                <input type="text" name="cep" id="id_cep" data-mascara="cep" inputmode="numeric" maxlength="9" placeholder="00000-000" value="{{ form.cep.value|default:'' }}" required>
+                <p id="cep-feedback" class="campo-ajuda"></p>
+            </div>
+            <div class="campo">
+                <label for="id_cidade">Cidade</label>
+                <input type="text" name="cidade" id="id_cidade" value="{{ form.cidade.value|default:'' }}" required>
+            </div>
+            <div class="campo">
+                <label for="id_estado">Estado</label>
+                <input type="text" name="estado" id="id_estado" value="{{ form.estado.value|default:'' }}" required>
+            </div>
+            <div class="campo">
+                <label for="id_endereco">Endereço</label>
+                <input type="text" name="endereco" id="id_endereco" value="{{ form.endereco.value|default:'' }}" required>
+            </div>
+
+            <button type="submit" class="btn btn-primario btn-bloco">Salvar alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

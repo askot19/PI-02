@@ -1,0 +1,13 @@
+Django==6.0.7
+
+# Driver do PostgreSQL, necessário apenas se você definir USE_POSTGRES=True
+# (veja README.md). Não é preciso instalar nada além desta biblioteca
+# Python — o binário do libpq já vem embutido no pacote "binary".
+psycopg[binary]>=3.1
+
+# Usados pelo módulo de análise de mercado (app "analise"): geocodificação
+# de endereços e clustering (DBSCAN) para identificar regiões de baixa
+# concentração de clientes. Veja README.md, seção "Análise de mercado".
+requests>=2.31,<3.0
+numpy>=1.26,<3.0
+scikit-learn>=1.4,<2.0

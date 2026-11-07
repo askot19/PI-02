@@ -1,0 +1,33 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Painel | Restaurante Viva{% endblock %}
+{% block body_class %}sistema-page{% endblock %}
+
+{% block content %}
+<div class="nav-comanda">
+    <span class="nav-comanda__titulo">Sistema do Restaurante Viva</span>
+    <a href="{% url 'sair' %}" class="btn-nav">Sair</a>
+</div>
+
+<div class="painel">
+    <div class="painel-hero">
+        <span class="eyebrow">Painel</span>
+        <h1 class="painel-hero__titulo">Bem-vindo(a), <u>{{ user.email }}</u></h1>
+    </div>
+
+    <div class="cartoes-nav">
+        <a href="{% url 'formulario' %}" class="cartao-nav">
+            <span class="cartao-nav__rotulo">Cadastrar clientes</span>
+            <span class="cartao-nav__desc">Adicione um novo cliente à base do restaurante.</span>
+        </a>
+        <a href="{% url 'lista' %}" class="cartao-nav">
+            <span class="cartao-nav__rotulo">Lista de clientes</span>
+            <span class="cartao-nav__desc">Consulte, edite ou remova clientes já cadastrados.</span>
+        </a>
+        <a href="{% url 'analise_mapa' %}" class="cartao-nav">
+            <span class="cartao-nav__rotulo">Análise de mercado</span>
+            <span class="cartao-nav__desc">Veja o mapa de concentração de clientes em Sorocaba e as regiões sugeridas para marketing.</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

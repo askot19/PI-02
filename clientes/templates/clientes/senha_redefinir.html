@@ -1,0 +1,48 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Redefinir senha | Viva Café & Restaurante{% endblock %}
+{% block body_class %}login-page{% endblock %}
+
+{% block content %}
+<div class="marca-topo">
+    <span class="marca-topo__nome">Viva Café &amp; Restaurante</span>
+    <a href="{% url 'login' %}" class="marca-topo__voltar">Voltar</a>
+</div>
+
+<div class="comanda-wrap">
+    <div class="comanda">
+        <span class="comanda__marca">Recuperação de acesso</span>
+        <h1 class="comanda__titulo">Nova senha</h1>
+        <hr class="comanda__linha">
+
+        {% if validlink %}
+            {% if form.errors %}
+            <ul class="form-errors">
+                {% for field in form %}{% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}{% endfor %}
+            </ul>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="campo">
+                    <label for="id_new_password1">Nova senha</label>
+                    <input type="password" name="new_password1" id="id_new_password1" required>
+                </div>
+                <div class="campo">
+                    <label for="id_new_password2">Confirme a nova senha</label>
+                    <input type="password" name="new_password2" id="id_new_password2" required>
+                </div>
+                <button type="submit" class="btn btn-primario btn-bloco">Salvar nova senha</button>
+            </form>
+        {% else %}
+            <p class="comanda__texto">
+                Este link de redefinição de senha é inválido ou já foi usado.
+                Solicite um novo link para continuar.
+            </p>
+            <a href="{% url 'senha_esqueci' %}" class="btn btn-primario btn-bloco">Solicitar novo link</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+Olá{% if user.first_name %} {{ user.first_name }}{% endif %},
+
+Você (ou alguém em seu nome) solicitou a redefinição da senha da sua conta
+no Viva Café & Restaurante.
+
+Para criar uma nova senha, acesse o link abaixo:
+
+{{ protocol }}://{{ domain }}{% url 'senha_redefinir' uidb64=uid token=token %}
+
+Este link é válido por 24 horas e só pode ser usado uma vez.
+
+Se você não solicitou essa alteração, pode ignorar este e-mail — sua senha
+continua a mesma.
+
+Equipe Viva Café & Restaurante

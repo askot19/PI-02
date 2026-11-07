@@ -1,0 +1,24 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Senha alterada | Viva Café & Restaurante{% endblock %}
+{% block body_class %}login-page{% endblock %}
+
+{% block content %}
+<div class="marca-topo">
+    <span class="marca-topo__nome">Viva Café &amp; Restaurante</span>
+</div>
+
+<div class="comanda-wrap">
+    <div class="comanda comanda--centro">
+        <span class="comanda__marca">Recuperação de acesso</span>
+        <h1 class="comanda__titulo">Senha alterada!</h1>
+        <hr class="comanda__linha">
+
+        <p class="comanda__texto">
+            Sua senha foi redefinida com sucesso. Já dá para entrar com a nova senha.
+        </p>
+
+        <a href="{% url 'login' %}" class="btn btn-primario btn-bloco">Entrar</a>
+    </div>
+</div>
+{% endblock %}

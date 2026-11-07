@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Restaurante Viva{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,900;1,500;1,600&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+    <!-- Nosso CSS carrega por último de propósito, para sempre ter a
+         palavra final sobre qualquer biblioteca externa carregada acima
+         (ex.: Leaflet, na tela de análise de mercado). -->
+    <link rel="stylesheet" href="{% static 'clientes/css/style.css' %}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    {% if messages %}
+    <div class="mensagens">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    <script src="{% static 'clientes/js/mascaras.js' %}" defer></script>
+</body>
+</html>

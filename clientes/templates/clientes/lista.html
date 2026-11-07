@@ -1,0 +1,140 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Lista de clientes | Restaurante Viva{% endblock %}
+{% block body_class %}lista-page{% endblock %}
+
+{% block content %}
+<div class="nav-comanda">
+    <a href="{% url 'sistema' %}" class="btn-nav">&larr; Voltar</a>
+    <span class="nav-comanda__titulo">Lista de clientes</span>
+    <a href="{% url 'sair' %}" class="btn-nav">Sair</a>
+</div>
+
+<div class="lista-wrap">
+    <p class="lista-boas-vindas">Bem-vindo <u>{{ user.email }}</u></p>
+
+    <form method="GET" class="busca">
+        <input
+            type="search"
+            name="search"
+            id="id_search"
+            placeholder="Pesquisar CPF, nome ou e-mail..."
+            value="{{ termo }}">
+        <button type="submit">Pesquisar</button>
+    </form>
+
+    <div class="tabela-scroll-container">
+        <button type="button" class="botao-scroll botao-scroll--esquerda" id="botao-scroll-esquerda" aria-label="Ver colunas anteriores">‹</button>
+
+        <div class="tabela-wrap" id="tabela-wrap">
+            <table class="tabela-clientes">
+                <thead>
+                    <tr>
+                        <th>CPF</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Sexo</th>
+                        <th>Data Nasc.</th>
+                        <th>CEP</th>
+                        <th>Cidade</th>
+                        <th>Estado</th>
+                        <th>Endereço</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td>{{ cliente.cpf }}</td>
+                        <td>{{ cliente.nome }}</td>
+                        <td>{{ cliente.email }}</td>
+                        <td>{{ cliente.telefone }}</td>
+                        <td>{{ cliente.get_sexo_display }}</td>
+                        <td>{{ cliente.data_nasc|date:"d/m/Y" }}</td>
+                        <td>{{ cliente.cep }}</td>
+                        <td>{{ cliente.cidade }}</td>
+                        <td>{{ cliente.estado }}</td>
+                        <td>{{ cliente.endereco }}</td>
+                        <td>
+                            <div class="acoes-tabela">
+                                <a class="acao-icone acao-editar" href="{% url 'editar' cliente.cpf %}" title="Editar">✏️</a>
+                                <form method="POST" action="{% url 'deletar' cliente.cpf %}" onsubmit="return confirm('Confirma exclusão deste cliente?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="acao-icone acao-excluir" title="Excluir">🗑️</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="11" class="sem-resultado">Nenhum cliente encontrado</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button type="button" class="botao-scroll botao-scroll--direita" id="botao-scroll-direita" aria-label="Ver mais colunas">›</button>
+    </div>
+</div>
+
+<script>
+let search = document.getElementById('id_search');
+search.addEventListener('input', function () {
+    if (search.value.trim() === '') {
+        window.location.href = window.location.pathname;
+    }
+});
+
+// Rolagem horizontal da tabela: botões "‹ ›" e arrastar com o mouse —
+// mais intuitivo do que depender das setas do teclado.
+(function () {
+    const wrap = document.getElementById('tabela-wrap');
+    const botaoEsquerda = document.getElementById('botao-scroll-esquerda');
+    const botaoDireita = document.getElementById('botao-scroll-direita');
+    if (!wrap || !botaoEsquerda || !botaoDireita) return;
+
+    function atualizarBotoes() {
+        const podeRolar = wrap.scrollWidth > wrap.clientWidth + 2;
+        botaoEsquerda.classList.toggle('botao-scroll--oculto', !podeRolar);
+        botaoDireita.classList.toggle('botao-scroll--oculto', !podeRolar);
+        botaoEsquerda.disabled = wrap.scrollLeft <= 2;
+        botaoDireita.disabled = wrap.scrollLeft >= wrap.scrollWidth - wrap.clientWidth - 2;
+    }
+
+    botaoEsquerda.addEventListener('click', function () {
+        wrap.scrollBy({ left: -280, behavior: 'smooth' });
+    });
+    botaoDireita.addEventListener('click', function () {
+        wrap.scrollBy({ left: 280, behavior: 'smooth' });
+    });
+    wrap.addEventListener('scroll', atualizarBotoes);
+    window.addEventListener('resize', atualizarBotoes);
+
+    // Arrastar a tabela com o mouse (clicar e arrastar, como um carrossel).
+    let arrastando = false;
+    let posicaoInicialX = 0;
+    let scrollInicial = 0;
+
+    wrap.addEventListener('mousedown', function (evento) {
+        arrastando = true;
+        wrap.classList.add('tabela-wrap--arrastando');
+        posicaoInicialX = evento.pageX;
+        scrollInicial = wrap.scrollLeft;
+    });
+    window.addEventListener('mouseup', function () {
+        arrastando = false;
+        wrap.classList.remove('tabela-wrap--arrastando');
+    });
+    wrap.addEventListener('mousemove', function (evento) {
+        if (!arrastando) return;
+        evento.preventDefault();
+        const distancia = evento.pageX - posicaoInicialX;
+        wrap.scrollLeft = scrollInicial - distancia;
+    });
+
+    atualizarBotoes();
+})();
+</script>
+{% endblock %}

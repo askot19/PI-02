@@ -1,0 +1,228 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Análise de mercado | Restaurante Viva{% endblock %}
+{% block body_class %}analise-page{% endblock %}
+
+{% block extra_head %}
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin="">
+<!-- MapLibre GL: usado para renderizar os tiles vetoriais do OpenFreeMap
+     (veja o comentário perto do L.maplibreGL mais abaixo, na seção de
+     script). -->
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+{% endblock %}
+
+{% block content %}
+<div class="nav-comanda">
+    <a href="{% url 'sistema' %}" class="btn-nav">&larr; Voltar</a>
+    <span class="nav-comanda__titulo">Análise de mercado — Sorocaba</span>
+    <a href="{% url 'sair' %}" class="btn-nav">Sair</a>
+</div>
+
+<div class="lista-wrap">
+    <div class="analise-intro">
+        <span class="eyebrow">Ciência de dados</span>
+        <h1 class="painel-hero__titulo" style="text-align:left; margin-bottom:14px;">
+            Onde estão nossos clientes — e onde ainda não estamos
+        </h1>
+        <p class="comanda__texto" style="color: var(--creme-200); max-width:720px;">
+            Esta análise geocodifica o endereço de cada cliente de Sorocaba,
+            agrupa quem já está fisicamente próximo com o algoritmo
+            <strong>DBSCAN</strong> (formando os "polos" já atendidos) e
+            cobre a cidade com uma grade que conta clientes por região.
+            As células com menos clientes — mas ainda dentro da área onde a
+            casa já atua — aparecem como sugestão de foco para campanhas de
+            marketing.
+        </p>
+    </div>
+
+    {% if not resultado.dependencias_ok %}
+    <div class="comanda" style="max-width:640px; margin:36px auto;">
+        <span class="comanda__marca">Dependências pendentes</span>
+        <h2 class="comanda__titulo" style="font-size:1.5rem;">Faltam algumas bibliotecas</h2>
+        <hr class="comanda__linha">
+        <p class="comanda__texto">
+            Esta análise usa <code>numpy</code>, <code>scikit-learn</code> e
+            <code>requests</code>, que foram adicionadas ao
+            <code>requirements.txt</code>. Rode, dentro do seu ambiente virtual:
+        </p>
+        <p class="comanda__texto" style="font-family: monospace; background: rgba(90,50,20,0.08); padding: 10px 14px; border-radius: 8px;">
+            pip install -r requirements.txt
+        </p>
+        <p class="comanda__texto">
+            Depois, <a href="?atualizar=1">clique aqui para tentar de novo</a>
+            (isso ignora qualquer resultado guardado em cache e recalcula na hora).
+        </p>
+    </div>
+
+    {% elif not resultado.clientes_suficientes %}
+    <div class="comanda" style="max-width:640px; margin:36px auto;">
+        <span class="comanda__marca">Ainda sem dados suficientes</span>
+        <h2 class="comanda__titulo" style="font-size:1.5rem;">Poucos clientes geocodificados</h2>
+        <hr class="comanda__linha">
+        <p class="comanda__texto">
+            A análise precisa de pelo menos 5 clientes de Sorocaba com
+            coordenadas conhecidas. Hoje há
+            <strong>{{ resultado.total_geocodificado }}</strong> cliente(s) nessa condição.
+        </p>
+        <p class="comanda__texto">
+            Clientes novos são geocodificados automaticamente ao serem
+            cadastrados ou editados. Para localizar os que já existem, rode
+            no terminal:
+        </p>
+        <p class="comanda__texto" style="font-family: monospace; background: rgba(90,50,20,0.08); padding: 10px 14px; border-radius: 8px;">
+            python manage.py geocodificar_clientes
+        </p>
+        <p class="comanda__texto">
+            Depois de cadastrar/geocodificar mais clientes,
+            <a href="?atualizar=1">clique aqui para tentar de novo</a>.
+        </p>
+    </div>
+
+    {% else %}
+    <p style="text-align:right; margin: 0 0 12px; font-size:0.82rem;">
+        <a href="?atualizar=1">↻ Atualizar análise agora</a>
+    </p>
+
+    <div id="mapa-analise" style="height:520px; border-radius:18px; overflow:hidden; box-shadow: var(--sombra-forte); margin-bottom: 18px;"></div>
+
+    <div class="legenda-mapa">
+        <span><span class="ponto-legenda" style="background-color:#6f4e37;"></span>Clientes</span>
+        <span><span class="ponto-legenda" style="background-color:#c9a15a;"></span>Polos já atendidos</span>
+        <span><span class="ponto-legenda" style="background-color:#7a1533;"></span>Regiões de oportunidade</span>
+    </div>
+
+    <h2 class="painel-hero__titulo" style="text-align:left; font-size:1.4rem; margin: 34px 0 16px;">
+        Regiões sugeridas para campanhas de marketing
+    </h2>
+
+    <div class="tabela-wrap">
+        <table class="tabela-clientes">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Região aproximada</th>
+                    <th>Clientes na célula</th>
+                    <th>Distância do cliente mais próximo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in resultado.regioes_oportunidade %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ r.nome_regiao }}</td>
+                    <td>{{ r.quantidade_clientes }}</td>
+                    <td>{{ r.distancia_km }} km</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="sem-resultado">Nenhuma região identificada</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <p style="font-size:0.8rem; color: var(--creme-200); opacity:0.7; max-width:720px; margin-bottom:40px;">
+        Metodologia: {{ resultado.total_geocodificado }} cliente(s) de Sorocaba geocodificado(s),
+        {{ resultado.clusters|length }} polo(s) identificado(s) pelo DBSCAN
+        (raio de agrupamento de 800m, mínimo de 3 clientes por polo), células
+        de grade de 1km × 1km, limitadas a até 3km de distância do cliente
+        mais próximo. Localização obtida via
+        <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noopener">Nominatim / OpenStreetMap</a>
+        — resultados são aproximados e dependem da qualidade dos endereços cadastrados.
+    </p>
+
+    {{ resultado.clientes|json_script:"dados-clientes" }}
+    {{ resultado.clusters|json_script:"dados-clusters" }}
+    {{ resultado.regioes_oportunidade|json_script:"dados-regioes" }}
+    {{ resultado.bbox|json_script:"dados-bbox" }}
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+    <!-- MapLibre GL + ponte oficial com o Leaflet (@maplibre/maplibre-gl-leaflet),
+         para desenhar os tiles do OpenFreeMap (https://openfreemap.org):
+         gratuito, sem chave de API, sem limite de requisições — mantido
+         por doações. Substitui o CARTO (que passou a exigir chave) e o
+         tile.openstreetmap.org "cru" (que bloqueou nosso IP por excesso de
+         testes durante o desenvolvimento). -->
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.0/leaflet-maplibre-gl.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const bbox = JSON.parse(document.getElementById('dados-bbox').textContent);
+        const clientes = JSON.parse(document.getElementById('dados-clientes').textContent);
+        const clusters = JSON.parse(document.getElementById('dados-clusters').textContent);
+        const regioes = JSON.parse(document.getElementById('dados-regioes').textContent);
+
+        const centroLat = (bbox.lat_min + bbox.lat_max) / 2;
+        const centroLon = (bbox.lon_min + bbox.lon_max) / 2;
+
+        const mapa = L.map('mapa-analise').setView([centroLat, centroLon], 12);
+
+        clientes.forEach(function (c) {
+            L.circleMarker([c.lat, c.lon], {
+                radius: 4,
+                color: '#6f4e37',
+                fillColor: '#6f4e37',
+                fillOpacity: 0.75,
+                weight: 1,
+            }).bindTooltip(c.nome).addTo(mapa);
+        });
+
+        clusters.forEach(function (cl) {
+            L.circleMarker([cl.centro_lat, cl.centro_lon], {
+                radius: 12 + Math.min(cl.quantidade_clientes, 18),
+                color: '#c9a15a',
+                fillColor: '#c9a15a',
+                fillOpacity: 0.2,
+                weight: 2,
+            }).bindTooltip('Polo com ' + cl.quantidade_clientes + ' cliente(s)').addTo(mapa);
+        });
+
+        regioes.forEach(function (r, indice) {
+            L.circleMarker([r.lat, r.lon], {
+                radius: 13,
+                color: '#7a1533',
+                fillColor: '#7a1533',
+                fillOpacity: 0.35,
+                weight: 2,
+            }).bindTooltip(
+                '#' + (indice + 1) + ' — ' + r.nome_regiao + '<br>' +
+                r.quantidade_clientes + ' cliente(s) na região'
+            ).addTo(mapa);
+        });
+
+        // OpenFreeMap (https://openfreemap.org): tiles vetoriais gratuitos,
+        // sem chave de API e sem limite de requisições, renderizados via
+        // MapLibre GL. Estilo "liberty" = visual completo, próximo ao do
+        // OpenStreetMap padrão.
+        try {
+        L.maplibreGL({
+            style: 'https://tiles.openfreemap.org/styles/liberty',
+            // Reaproveita a pane de tiles padrão do Leaflet (z-index 200),
+            // em vez de deixar o plugin criar a pane dele próprio — assim
+            // o mapa-base fica garantidamente abaixo dos círculos de
+            // clientes/polos/oportunidades (overlayPane, z-index 400). O
+            // CSS .leaflet-gl-layer em style.css reforça isso como
+            // segunda camada de proteção.
+            pane: 'tilePane',
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ' +
+                '| Tiles by <a href="https://openfreemap.org">OpenFreeMap</a>',
+        }).addTo(mapa);
+        } catch (erro) {
+            // Se o mapa-base falhar (ex.: versão incompatível do MapLibre),
+            // os marcadores acima continuam aparecendo sobre o fundo vazio.
+            console.error('Falha ao carregar o mapa-base (MapLibre):', erro);
+        }
+    });
+    </script>
+    {% endif %}
+</div>
+{% endblock %}
