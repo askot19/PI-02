@@ -22,8 +22,6 @@ foram mantidos:
 
 ## Ambiente de desenvolvimento
 
-Este projeto foi configurado para rodar da mesma forma que o Sistema de
-Uniformes:
 
 - **Versão do Django travada** (`Django==6.0.7` no `requirements.txt`, em vez
   de uma faixa de versões) — evita que uma atualização automática mude o
