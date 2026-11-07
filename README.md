@@ -131,8 +131,7 @@ python manage.py runserver
 
 ### Rodando no VSCode
 
-O projeto já vem com uma pasta `.vscode/` configurada, no mesmo espírito do
-Sistema de Uniformes:
+O projeto já vem com uma pasta `.vscode/` configurada:
 
 - Abra a pasta `viva_cafe_django` no VSCode (`File > Open Folder`).
 - Instale a extensão **Python** (a `.vscode/extensions.json` já sugere isso
